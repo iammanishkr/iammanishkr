@@ -1,1 +1,1 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F2027,50:2C5364,100:00C9FF&height=220&section=header&text=Manish%20Kumar&fontSize=45&fontColor=ffffff&animation=fadeIn&fontAlignY=35"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=0:00F5FF,50:7B00FF,100:FF00F7&text=Manish%20Kumar&fontSize=50&fontColor=ffffff&animation=twinkling&fontAlignY=40"/>
