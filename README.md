@@ -1,14 +1,16 @@
 <div align="center">
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=CCFF00&center=true&vCenter=true&random=false&width=600&lines=Hey%2C+I'm+Manish+Kumar;MCA+Student+from+India+%F0%9F%87%AE%F0%9F%87%B3;I+build+web+%26+Android+apps;and+ship+often+%F0%9F%9A%80)](https://github.com/iammanishkr)
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=00F7FF&center=true&vCenter=true&random=false&width=650&lines=Hey%2C+I'm+Manish+Kumar;AI+Engineer+from+India+🇮🇳;I+build+AI+systems;and+ship+projects)
 
-<br/>
+<br>
 
-[![GitHub Stats Card](https://github-readme-stats.vercel.app/api?username=iammanishkr&show_icons=true&hide_border=true&bg_color=0d1117&title_color=ccff00&icon_color=ccff00&text_color=ccff00&ring_color=ccff00&hide_title=false&custom_title=MANISH+KUMAR+%40iammanishkr&include_all_commits=true&count_private=true&show=reviews,discussions_started)](https://github.com/iammanishkr)
+<a href="https://github.com/iammanishkr">
+<img src="https://github-readme-stats.vercel.app/api?username=iammanishkr&show_icons=true&theme=tokyonight&hide_border=true&hide_title=true" width="600"/>
+</a>
 
-<br/>
+<br>
 
-**MCA Student · Pune, India · Building full-stack apps & Android tools**
+**AI Engineer · Building AI Agents · Data Engineering Explorer**
 
 </div>
 
@@ -16,56 +18,34 @@
 
 ### 🚀 Projects
 
-**[Stream Platform](https://github.com/iammanishkr/Stream_Platform)** — Full streaming web platform  
-`JavaScript` · Web app
+**AI Trading Agent** — AI system that analyzes market signals and suggests buy/sell trades  
+`AI agent` · `automation` · `trading systems`
 
-**[MoviePlatform](https://github.com/iammanishkr/MoviePlatform)** — Browse & discover movies  
-`Python` · Web app
+**Skin & Hair Analysis AI** — ML model that detects skin/hair concerns and recommends ingredients  
+`machine learning` · `computer vision`
 
-**[ChatBot](https://github.com/iammanishkr/ChatBot)** — AI-powered conversational bot  
-`Python` · AI agent
-
-**[Car Showcase](https://github.com/iammanishkr/car-showcase)** — Luxury car showcase with Django  
-`Django · Bootstrap` · Web app
-
-**[VotingApp](https://github.com/iammanishkr/VotingApp)** — Secure voting with admin panel  
-`Java · SQLite` · Android app
-
-**[LoginSystem](https://github.com/iammanishkr/LoginSystem)** — Clean authentication UI  
-`HTML · CSS` · Web app
+**Twitter Bot Detection** — Detects fake Twitter accounts using ML models  
+`ML project` · `classification`
 
 ---
 
 ### 🛠️ Stack
 
-<img src="https://skillicons.dev/icons?i=python,java,js,django,androidstudio,html,css,git" />
+<img src="https://skillicons.dev/icons?i=python,java,js,react,aws,docker,git,linux,mysql,snowflake" />
 
-Currently leveling up **DSA** + **System Design** + **REST APIs**
-
----
-
-### 🐍 Contributions
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake-dark.svg"/>
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake.svg"/>
-  <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake-dark.svg"/>
-</picture>
-
-</div>
+Building with **AI APIs · ML Models · Cloud Infrastructure**
 
 ---
 
 ### 🔗 Links
 
-[![GitHub](https://img.shields.io/badge/@iammanishkr-000?style=flat-square&logo=github&logoColor=white)](https://github.com/iammanishkr)
-[![LinkedIn](https://img.shields.io/badge/Manish_Kumar-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/iammanishkr)
-[![Email](https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:manishkumar@email.com)
+[![LinkedIn](https://img.shields.io/badge/linkedin-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com)
+[![GitHub](https://img.shields.io/badge/github-000?style=flat-square&logo=github&logoColor=white)](https://github.com/iammanishkr)
 
 ---
 
 <div align="center">
-<sub>Building my skills, one commit at a time 🚀</sub>
+
+<sub>Building intelligent systems, one commit at a time</sub>
+
 </div>
