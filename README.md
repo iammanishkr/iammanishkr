@@ -149,6 +149,4 @@ me.say_hi()
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:00F5FF,50:7B00FF,100:FF00F7&section=footer" width="100%"/>
 
-**⭐ Star some repos if you find them helpful — it means a lot! 🙏**
-
 </div>
