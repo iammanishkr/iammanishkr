@@ -1,105 +1,77 @@
-<!-- CYBERPUNK CODER README -->
+<div align="center">
 
-<p align="center">
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=32&duration=2500&pause=900&color=00FF9C&center=true&vCenter=true&width=900&lines=Initializing+Developer+Profile...;Welcome+to+my+Code+Terminal;AI+Agent+Builder;Machine+Learning+Explorer;Data+Engineering+Nerd"/>
-</p>
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=00B4D8&center=true&vCenter=true&random=false&width=600&lines=Hey%2C+I'm+Manish+Kumar;MCA+Student+from+India+%F0%9F%87%AE%F0%9F%87%B3;I+build+web+%26+Android+apps;and+ship+often)](https://github.com/iammanishkr)
 
----
+<br/>
 
-<p align="center">
-<img src="https://media.giphy.com/media/L8K62iTDkzGX6/giphy.gif" width="600"/>
-</p>
+**MCA Student · Pune, India · Building full-stack apps & Android tools**
+
+</div>
 
 ---
 
-# > whoami
+### 🚀 Projects
 
-```
-Name: Manish Kumar
-Role: AI Engineer
-Focus: AI Agents / ML Systems / Data Pipelines
-Environment: Python | Cloud | Automation
-Status: Coding the future
-```
+**[Stream Platform](https://github.com/iammanishkr/Stream_Platform)** — Full streaming web platform  
+`JavaScript` · Web app
 
----
+**[MoviePlatform](https://github.com/iammanishkr/MoviePlatform)** — Browse & discover movies  
+`Python` · Web app
 
-# > tech_stack.exe
+**[ChatBot](https://github.com/iammanishkr/ChatBot)** — AI-powered conversational bot  
+`Python` · AI agent
 
-<p align="center">
+**[Car Showcase](https://github.com/iammanishkr/car-showcase)** — Luxury car showcase  
+`Django · Bootstrap` · Web app
 
-<img src="https://skillicons.dev/icons?i=python,java,js,react,nodejs,docker,aws,git,linux,mysql,snowflake&theme=dark"/>
-
-</p>
+**[VotingApp](https://github.com/iammanishkr/VotingApp)** — Secure voting with admin panel  
+`Java · SQLite` · Android app
 
 ---
 
-# > currently_building
+### 🛠️ Stack
 
-```
-[1] AI Trading Agent
-[2] Skin & Hair ML Analysis Model
-[3] Twitter Bot Detection
-[4] Scalable Data Engineering Pipelines
-```
+<img src="https://skillicons.dev/icons?i=python,java,js,django,androidstudio,html,css,git" />
+
+Currently learning **DSA** + **System Design** + **REST APIs**
 
 ---
 
-# > system_stats
+### 📊 Stats
 
-<p align="center">
+<div align="center">
 
-<img height="170em" src="https://github-readme-stats.vercel.app/api?username=iammanishkr&show_icons=true&theme=chartreuse-dark"/>
+<img height="160em" src="https://github-readme-stats.vercel.app/api?username=iammanishkr&show_icons=true&hide_border=true&bg_color=0D1117&title_color=00b4d8&icon_color=00b4d8&text_color=cdd6f4&include_all_commits=true"/>
+<img height="160em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=iammanishkr&layout=compact&hide_border=true&bg_color=0D1117&title_color=00b4d8&text_color=cdd6f4"/>
 
-<img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=iammanishkr&layout=compact&theme=chartreuse-dark"/>
-
-</p>
-
----
-
-# > commit_activity
-
-<p align="center">
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=iammanishkr&theme=chartreuse-dark"/>
-
-</p>
+</div>
 
 ---
 
-# > neural_network_activity
+### 🐍 Contributions
 
-[![activity graph](https://github-readme-activity-graph.vercel.app/graph?username=iammanishkr&theme=chartreuse-dark)](https://github.com/ashutosh00710/github-readme-activity-graph)
+<div align="center">
 
----
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake-dark.svg"/>
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake.svg"/>
+  <img alt="snake" src="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake-dark.svg"/>
+</picture>
 
-# > contribution_snake
-
-![snake gif](https://github.com/iammanishkr/iammanishkr/blob/output/github-contribution-grid-snake.svg)
-
----
-
-# > connect
-
-<p align="center">
-
-<a href="https://linkedin.com">
-<img src="https://skillicons.dev/icons?i=linkedin"/>
-</a>
-
-</p>
+</div>
 
 ---
 
-# > profile_visitors
+### 🔗 Links
 
-![](https://komarev.com/ghpvc/?username=iammanishkr&color=brightgreen)
+[![GitHub](https://img.shields.io/badge/@iammanishkr-000?style=flat-square&logo=github&logoColor=white)](https://github.com/iammanishkr)
+[![LinkedIn](https://img.shields.io/badge/Manish_Kumar-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/iammanishkr)
+[![Email](https://img.shields.io/badge/Email_me-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:manishkumar@email.com)
 
 ---
 
-```
+<div align="center">
 
-“Programs must be written for people to read, and only incidentally for machines to execute.”  
-— Harold Abelson
+<sub>Building my skills, one commit at a time 🚀</sub>
 
-```
+</div>
