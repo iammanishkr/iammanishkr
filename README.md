@@ -75,6 +75,27 @@
 
 ---
 
+## 🎮 Play a Quick Game
+
+<p align="center">
+  <b>Bug Squasher</b> — click the bugs before they crash the build. Golden bugs are flaky tests, worth extra.
+</p>
+<p align="center">
+  <a href="https://iammanishkr.github.io/iammanishkr/bug-squasher.html">
+    <img src="https://img.shields.io/badge/▶️_Play_Bug_Squasher-1a936f?style=for-the-badge" alt="Play Bug Squasher">
+  </a>
+</p>
+
+---
+
+## 🐍 Contribution Snake
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iammanishkr/iammanishkr/output/github-contribution-grid-snake.svg" alt="Contribution snake eating the graph">
+</p>
+
+---
+
 ## 📊 GitHub Snapshot
 
 <p align="center">
