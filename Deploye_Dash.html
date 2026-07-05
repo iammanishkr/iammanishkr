@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deploy Dash — Manish Kumar</title>
+<style>
+  :root{
+    --paper:#f6f3ea;
+    --ink:#1b263b;
+    --pass:#1a936f;
+    --fail:#c1121f;
+    --amber:#f7b32b;
+    --line:#d8d2c0;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--mono);
+    display:flex;
+    justify-content:center;
+    padding:24px 12px;
+  }
+  .console{
+    width:100%;
+    max-width:760px;
+    background:#fffdf7;
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:0 2px 0 var(--line);
+    overflow:hidden;
+  }
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 16px;
+    border-bottom:1px solid var(--line);
+    background:#efe9db;
+  }
+  .titlebar .dots{display:flex;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:var(--fail);}
+  .dot.y{background:var(--amber);}
+  .dot.g{background:var(--pass);}
+  .titlebar .name{ font-size:12px; letter-spacing:.04em; color:#6b6455; }
+
+  .header{ padding:20px 24px 8px; }
+  .header h1{ font-family:var(--display); font-size:26px; margin:0 0 4px; letter-spacing:-0.01em; }
+  .header p{ margin:0; font-size:13px; color:#6b6455; }
+
+  .hud{
+    display:flex;
+    gap:18px;
+    padding:14px 24px;
+    border-top:1px dashed var(--line);
+    border-bottom:1px dashed var(--line);
+    font-size:13px;
+  }
+  .hud .stat b{ display:block; font-family:var(--display); font-size:20px; }
+  .hud .stat.score b{ color:var(--pass); }
+  .hud .stat.best b{ color:var(--amber); }
+  .hud .stat.speed b{ color:var(--ink); }
+
+  .field-wrap{
+    position:relative;
+    margin:16px 24px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  canvas{ display:block; width:100%; height:auto; background:#fbf9f2; cursor:pointer; }
+
+  .overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(27,38,59,0.92);
+    color:#fbf9f2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+  }
+  .overlay h2{ font-family:var(--display); font-size:24px; margin:0 0 6px; }
+  .overlay p{ font-size:13px; color:#cfd6e4; margin:0 0 18px; max-width:420px; }
+  button{
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--pass);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:4px;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  button:hover{ background:#157a5c; }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 24px 20px;
+    font-size:11px;
+    color:#8a8371;
+  }
+  .footer a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); }
+  .hint{ font-size:11px; color:#8a8371; padding:0 24px 4px; }
+
+  .avatar-picker{
+    display:flex;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .avatar-option{
+    width:64px;
+    height:76px;
+    border-radius:8px;
+    border:2px solid transparent;
+    background:rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .avatar-option:hover{ transform: translateY(-3px); background:rgba(255,255,255,0.12); }
+  .avatar-option.selected{ border-color: var(--pass); background:rgba(26,147,111,0.18); }
+  .avatar-option canvas{ image-rendering:pixelated; }
+</style>
+</head>
+<body>
+
+<div class="console">
+  <div class="titlebar">
+    <div class="dots">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    </div>
+    <div class="name">deploy_dash.js — running on main</div>
+  </div>
+
+  <div class="header">
+    <h1>🏃 Deploy Dash</h1>
+    <p>Jump the bugs and merge conflicts. Grab coffee for bonus points. Reach production in one piece.</p>
+  </div>
+
+  <div class="hud">
+    <div class="stat score"><span>score</span><b id="score">0</b></div>
+    <div class="stat best"><span>best</span><b id="best">0</b></div>
+    <div class="stat speed"><span>build speed</span><b id="speed">1.0x</b></div>
+  </div>
+
+  <div class="hint">Tap / click / press Space to jump. Hold briefly for a higher jump.</div>
+
+  <div class="field-wrap">
+    <canvas id="game" width="720" height="280"></canvas>
+    <div class="overlay" id="startOverlay">
+      <h2>git push origin main</h2>
+      <p>Your commit is live. Dash through the pipeline, hop over bugs and merge conflicts, and collect coffee to keep your streak alive.</p>
+      <div class="avatar-picker" id="avatarPicker"></div>
+      <button id="startBtn">Start Deploy ▶</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>status: <b id="buildStatus" style="color:#8a8371;">idle</b></span>
+    <a href="https://github.com/iammanishkr" target="_blank">@iammanishkr</a>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const speedEl = document.getElementById('speed');
+const startOverlay = document.getElementById('startOverlay');
+const startBtn = document.getElementById('startBtn');
+const buildStatus = document.getElementById('buildStatus');
+const fieldWrap = document.querySelector('.field-wrap');
+const avatarPicker = document.getElementById('avatarPicker');
+
+const W = canvas.width, H = canvas.height;
+const GROUND_Y = H - 46;
+
+let best = Number(localStorage_safe_get());
+function localStorage_safe_get(){
+  try { return localStorage.getItem('deployDashBest') || 0; } catch(e){ return 0; }
+}
+function localStorage_safe_set(v){
+  try { localStorage.setItem('deployDashBest', v); } catch(e){}
+}
+bestEl.textContent = best;
+
+// ---------- Avatars ----------
+const AVATARS = [
+  { name: 'Nova',  skin:'#f3c69a', hair:'#2b2118', hoodie:'#3d5a80', hoodieDark:'#2c4260', accent:'#f7b32b' },
+  { name: 'Kiro',  skin:'#c98b5e', hair:'#161616', hoodie:'#7b2cbf', hoodieDark:'#5a1f8c', accent:'#1a936f' },
+  { name: 'Sable', skin:'#e8b48a', hair:'#6b4226', hoodie:'#c1121f', hoodieDark:'#8c0d16', accent:'#f7b32b' }
+];
+let avatarIndex = 0;
+
+function renderAvatarThumb(container, avatar, idx){
+  const c = document.createElement('canvas');
+  c.width = 40; c.height = 48;
+  const tctx = c.getContext('2d');
+  drawCharacter(tctx, 4, 4, 1, avatar, 0, false, 0);
+  container.appendChild(c);
+}
+
+function buildAvatarPicker(){
+  avatarPicker.innerHTML = '';
+  AVATARS.forEach((avatar, idx) => {
+    const opt = document.createElement('div');
+    opt.className = 'avatar-option' + (idx === avatarIndex ? ' selected' : '');
+    renderAvatarThumb(opt, avatar, idx);
+    opt.addEventListener('click', () => {
+      avatarIndex = idx;
+      document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+    avatarPicker.appendChild(opt);
+  });
+}
+buildAvatarPicker();
+
+// ---------- Game state ----------
+let running = false;
+let score = 0;
+let speed = 5.2;
+let baseSpeed = 5.2;
+let frame = 0;
+let obstacles = [];
+let coffees = [];
+let particles = [];
+let clouds = [];
+let buildings = [];
+
+const player = {
+  x: 70, y: GROUND_Y - 40, w: 30, h: 40,
+  vy: 0, jumping: false, legPhase: 0, squash: 1
+};
+const GRAVITY = 0.85;
+const JUMP_V = -13.5;
+const JUMP_HOLD_V = -6;
+
+let holdingJump = false;
+let holdFrames = 0;
+
+function initSkyline(){
+  buildings = [];
+  let x = 0;
+  while(x < W + 100){
+    const w = 40 + Math.random()*50;
+    const h = 30 + Math.random()*70;
+    buildings.push({ x, w, h });
+    x += w + 12;
+  }
+  clouds = [];
+  for(let i=0;i<4;i++){
+    clouds.push({ x: Math.random()*W, y: 14 + Math.random()*34, s: 0.7 + Math.random()*0.6 });
+  }
+}
+initSkyline();
+
+function resetGame(){
+  score = 0; speed = baseSpeed; frame = 0;
+  obstacles = []; coffees = []; particles = [];
+  player.y = GROUND_Y - player.h;
+  player.vy = 0;
+  player.jumping = false;
+  scoreEl.textContent = score;
+  speedEl.textContent = '1.0x';
+}
+
+function jump(){
+  if(!running) return;
+  if(!player.jumping){
+    player.vy = JUMP_V;
+    player.jumping = true;
+    holdingJump = true;
+    holdFrames = 0;
+    spawnDust(player.x + player.w/2, GROUND_Y, 6);
+  }
+}
+function releaseJump(){ holdingJump = false; }
+
+canvas.addEventListener('mousedown', jump);
+canvas.addEventListener('mouseup', releaseJump);
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, {passive:false});
+canvas.addEventListener('touchend', (e) => { e.preventDefault(); releaseJump(); }, {passive:false});
+document.addEventListener('keydown', (e) => {
+  if(e.code === 'Space'){ e.preventDefault(); jump(); }
+});
+document.addEventListener('keyup', (e) => {
+  if(e.code === 'Space'){ releaseJump(); }
+});
+
+function spawnObstacle(){
+  const types = ['bug', 'conflict', 'error'];
+  const type = types[Math.floor(Math.random() * types.length)];
+  let w = 28, h = 28;
+  if(type === 'conflict'){ w = 40, h = 32; }
+  if(type === 'error'){ w = 24, h = 34; }
+  obstacles.push({ x: W + 20, y: GROUND_Y - h, w, h, type, bob: Math.random()*10 });
+}
+
+function spawnCoffee(){
+  coffees.push({ x: W + 20, y: GROUND_Y - 34 - Math.random()*70, r: 11, collected:false, bob: Math.random()*Math.PI*2 });
+}
+
+function spawnDust(x, y, n){
+  for(let i=0;i<n;i++){
+    particles.push({
+      x, y,
+      vx: (Math.random()-0.5) * 2.4,
+      vy: -Math.random()*1.8,
+      life: 22 + Math.random()*10,
+      r: 2 + Math.random()*2,
+      color: 'rgba(107,100,85,0.5)'
+    });
+  }
+}
+
+function updateParticles(){
+  particles.forEach(p => {
+    p.x += p.vx - speed*0.15;
+    p.y += p.vy;
+    p.vy += 0.06;
+    p.life--;
+  });
+  particles = particles.filter(p => p.life > 0);
+}
+
+function drawParticles(){
+  particles.forEach(p => {
+    ctx.globalAlpha = Math.max(p.life / 30, 0);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+}
+
+// ---------- Drawing ----------
+function drawSky(){
+  const grad = ctx.createLinearGradient(0,0,0,GROUND_Y);
+  grad.addColorStop(0, '#fdf6e8');
+  grad.addColorStop(1, '#fbf1de');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,GROUND_Y+2);
+
+  // sun
+  ctx.fillStyle = 'rgba(247,179,43,0.85)';
+  ctx.beginPath();
+  ctx.arc(W - 70, 46, 22, 0, Math.PI*2);
+  ctx.fill();
+
+  // clouds, parallax
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  clouds.forEach(c => {
+    c.x -= speed * 0.12;
+    if(c.x < -60) c.x = W + 60;
+    drawCloud(c.x, c.y, c.s);
+  });
+}
+
+function drawCloud(x,y,s){
+  ctx.beginPath();
+  ctx.ellipse(x, y, 18*s, 9*s, 0, 0, Math.PI*2);
+  ctx.ellipse(x+14*s, y+3*s, 13*s, 8*s, 0, 0, Math.PI*2);
+  ctx.ellipse(x-14*s, y+3*s, 13*s, 7*s, 0, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawSkyline(){
+  ctx.fillStyle = 'rgba(27,38,59,0.10)';
+  const offset = (frame * speed * 0.28) % (W + 100);
+  buildings.forEach(b => {
+    let x = b.x - offset;
+    if(x < -b.w) x += (W + 100);
+    ctx.fillRect(x, GROUND_Y - b.h, b.w, b.h);
+    // windows
+    ctx.fillStyle = 'rgba(27,38,59,0.18)';
+    for(let wy = GROUND_Y - b.h + 8; wy < GROUND_Y - 8; wy += 14){
+      for(let wx = x + 6; wx < x + b.w - 6; wx += 12){
+        ctx.fillRect(wx, wy, 5, 7);
+      }
+    }
+    ctx.fillStyle = 'rgba(27,38,59,0.10)';
+  });
+}
+
+function drawGround(){
+  const grad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+  grad.addColorStop(0, '#efe9db');
+  grad.addColorStop(1, '#e6dfcc');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+  ctx.strokeStyle = '#c9c2ac';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, GROUND_Y); ctx.lineTo(W, GROUND_Y);
+  ctx.stroke();
+
+  ctx.fillStyle = '#c9c2ac';
+  const tickSpacing = 40;
+  const offset = (frame * speed) % tickSpacing;
+  for(let x = -offset; x < W; x += tickSpacing){
+    ctx.fillRect(x, GROUND_Y + 7, 3, 7);
+  }
+}
+
+// draws the character at (x,y) top-left, at given scale, given avatar palette,
+// legPhase for run cycle, jumping bool, and squash factor
+function drawCharacter(c, x, y, scale, avatar, legPhase, jumping, tilt){
+  c.save();
+  c.translate(x, y);
+  c.scale(scale, scale);
+
+  const w = 30, h = 40;
+
+  // shadow ground contact (only used by main render, thumbnails ignore)
+
+  // legs
+  c.fillStyle = avatar.hoodieDark;
+  const legSwing = jumping ? 3 : Math.sin(legPhase) * 6;
+  c.fillRect(9, h - 14, 6, 14 - Math.max(legSwing,0));
+  c.fillRect(w - 15, h - 14, 6, 14 - Math.max(-legSwing,0));
+
+  // shoes
+  c.fillStyle = '#1b263b';
+  c.fillRect(8, h - 4 - Math.max(legSwing,0)*0, 8, 4);
+  c.fillRect(w - 16, h - 4, 8, 4);
+
+  // hoodie body (rounded-ish via rects)
+  c.fillStyle = avatar.hoodie;
+  c.fillRect(6, 14, w - 12, h - 26);
+  // hoodie pocket
+  c.fillStyle = avatar.hoodieDark;
+  c.fillRect(10, h - 22, w - 20, 6);
+
+  // backpack strap accent
+  c.fillStyle = avatar.accent;
+  c.fillRect(w - 11, 14, 3, h - 26);
+
+  // arms
+  c.fillStyle = avatar.hoodie;
+  const armSwing = jumping ? -2 : Math.sin(legPhase + Math.PI) * 5;
+  c.fillRect(3, 16 + Math.max(armSwing,0)*0, 5, 14);
+  c.fillRect(w - 8, 16, 5, 14);
+
+  // laptop bag
+  c.fillStyle = '#6b6455';
+  c.fillRect(w - 6, h - 24, 8, 10);
+  c.fillStyle = avatar.accent;
+  c.fillRect(w - 5, h - 22, 6, 2);
+
+  // head
+  c.fillStyle = avatar.skin;
+  c.fillRect(7, 2, w - 14, 13);
+  // hair
+  c.fillStyle = avatar.hair;
+  c.fillRect(6, 0, w - 12, 5);
+  c.fillRect(6, 0, 3, 10);
+  c.fillRect(w - 9, 0, 3, 10);
+  // glasses
+  c.strokeStyle = '#1b263b';
+  c.lineWidth = 1.4;
+  c.strokeRect(9, 7, 6, 5);
+  c.strokeRect(w - 15, 7, 6, 5);
+  c.beginPath();
+  c.moveTo(15, 9); c.lineTo(w - 15, 9);
+  c.stroke();
+
+  c.restore();
+}
+
+function drawPlayer(){
+  const avatar = AVATARS[avatarIndex];
+  const legPhase = player.legPhase;
+  drawCharacter(ctx, player.x, player.y, 1, avatar, legPhase, player.jumping, 0);
+}
+
+function drawObstacle(o){
+  ctx.save();
+  const bobY = Math.sin((frame + o.bob*10) * 0.15) * 2;
+  ctx.translate(o.x, o.y + bobY);
+
+  // soft shadow
+  ctx.fillStyle = 'rgba(27,38,59,0.12)';
+  ctx.beginPath();
+  ctx.ellipse(o.w/2, o.h + (GROUND_Y - (o.y+bobY) - o.h) + 4, o.w*0.4, 4, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  if(o.type === 'bug'){
+    ctx.font = '26px sans-serif';
+    ctx.fillText('🐛', -2, o.h);
+  } else if(o.type === 'conflict'){
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(-2, 0, o.w+4, o.h);
+    ctx.strokeStyle = '#c1121f';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(-2, 0, o.w+4, o.h);
+    ctx.fillStyle = '#c1121f';
+    ctx.font = 'bold 10px monospace';
+    ctx.fillText('<<<<<<<', 1, 12);
+    ctx.fillStyle = '#8a8371';
+    ctx.fillText('=======', 1, 21);
+    ctx.fillStyle = '#1a936f';
+    ctx.fillText('>>>>>>>', 1, 30);
+  } else {
+    ctx.fillStyle = '#f7b32b';
+    ctx.beginPath();
+    ctx.moveTo(o.w/2, 0);
+    ctx.lineTo(o.w, o.h);
+    ctx.lineTo(0, o.h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#c1121f';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#1b263b';
+    ctx.font = 'bold 15px monospace';
+    ctx.fillText('!', o.w/2 - 3, o.h - 6);
+  }
+  ctx.restore();
+}
+
+function drawCoffee(c){
+  ctx.save();
+  const bobY = Math.sin(frame * 0.1 + c.bob) * 4;
+  ctx.translate(c.x, c.y + bobY);
+
+  // glow
+  ctx.fillStyle = 'rgba(247,179,43,0.18)';
+  ctx.beginPath();
+  ctx.arc(0, 0, 16, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.font = '22px sans-serif';
+  ctx.fillText('☕', -11, 8);
+
+  // steam
+  ctx.strokeStyle = 'rgba(139,131,113,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  const steamOff = Math.sin(frame*0.2) * 2;
+  ctx.moveTo(-3, -8);
+  ctx.quadraticCurveTo(-3 + steamOff, -14, -3, -18);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function rectsOverlap(a, b){
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function update(){
+  frame++;
+
+  speed = baseSpeed + Math.min(frame / 600, 4.5);
+  speedEl.textContent = (speed / baseSpeed).toFixed(1) + 'x';
+
+  const wasJumping = player.jumping;
+  player.vy += GRAVITY;
+  if(holdingJump && player.vy < 0 && holdFrames < 10){
+    player.vy += JUMP_HOLD_V * 0.06;
+    holdFrames++;
+  }
+  player.y += player.vy;
+  if(player.y >= GROUND_Y - player.h){
+    player.y = GROUND_Y - player.h;
+    player.vy = 0;
+    if(wasJumping){ spawnDust(player.x + player.w/2, GROUND_Y, 8); }
+    player.jumping = false;
+  }
+  if(!player.jumping){
+    player.legPhase += 0.35;
+    if(frame % 7 === 0){ spawnDust(player.x + 12, GROUND_Y - 1, 1); }
+  }
+
+  if(frame % Math.max(50, 90 - Math.floor(frame/100)) === 0){
+    spawnObstacle();
+  }
+  if(frame % 130 === 0){
+    spawnCoffee();
+  }
+
+  obstacles.forEach(o => o.x -= speed);
+  obstacles = obstacles.filter(o => o.x + o.w > -10);
+
+  coffees.forEach(c => c.x -= speed);
+  coffees = coffees.filter(c => c.x > -20 && !c.collected);
+
+  updateParticles();
+
+  const playerBox = { x: player.x + 5, y: player.y + 4, w: player.w - 10, h: player.h - 8 };
+
+  for(const o of obstacles){
+    if(rectsOverlap(playerBox, o)){
+      return gameOver();
+    }
+  }
+
+  for(const c of coffees){
+    const dx = (playerBox.x + playerBox.w/2) - c.x;
+    const dy = (playerBox.y + playerBox.h/2) - c.y;
+    if(Math.sqrt(dx*dx + dy*dy) < c.r + 14){
+      c.collected = true;
+      score += 5;
+    }
+  }
+
+  if(frame % 6 === 0){ score += 1; }
+  scoreEl.textContent = score;
+}
+
+function render(){
+  drawSky();
+  drawSkyline();
+  drawGround();
+  drawParticles();
+  obstacles.forEach(drawObstacle);
+  coffees.forEach(drawCoffee);
+  drawPlayer();
+}
+
+let loopId;
+function loop(){
+  if(!running) return;
+  update();
+  render();
+  loopId = requestAnimationFrame(loop);
+}
+
+function startGame(){
+  resetGame();
+  running = true;
+  buildStatus.textContent = 'deploying...';
+  buildStatus.style.color = 'var(--amber)';
+  startOverlay.remove();
+  loop();
+}
+
+function gameOver(){
+  running = false;
+  cancelAnimationFrame(loopId);
+
+  if(score > best){
+    best = score;
+    localStorage_safe_set(best);
+    bestEl.textContent = best;
+  }
+
+  buildStatus.textContent = 'build failed ✘';
+  buildStatus.style.color = 'var(--fail)';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.innerHTML = `
+    <h2 style="color:#ff9b9b">Build Failed ✘</h2>
+    <p>You hit a blocker at score <b>${score}</b>. Best run: <b>${best}</b>.</p>
+    <div class="avatar-picker" id="avatarPickerRetry"></div>
+    <button id="retryBtn">Redeploy ▶</button>
+  `;
+  fieldWrap.appendChild(overlay);
+
+  const retryPicker = overlay.querySelector('#avatarPickerRetry');
+  AVATARS.forEach((avatar, idx) => {
+    const opt = document.createElement('div');
+    opt.className = 'avatar-option' + (idx === avatarIndex ? ' selected' : '');
+    renderAvatarThumb(opt, avatar, idx);
+    opt.addEventListener('click', () => {
+      avatarIndex = idx;
+      retryPicker.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+    retryPicker.appendChild(opt);
+  });
+
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    overlay.remove();
+    startGame();
+  });
+}
+
+startBtn.addEventListener('click', startGame);
+render();
+</script>
+
+</body>
+</html>
