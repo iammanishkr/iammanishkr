@@ -78,11 +78,11 @@
 ## 🎮 Play a Quick Game
 
 <p align="center">
-  <b>Bug Squasher</b> — click the bugs before they crash the build. Golden bugs are flaky tests, worth extra.
+  <b>Deploy Dash</b> An original endless-runner: you're a dev dashing through the pipeline, jumping bugs, merge-conflict markers, and error flags, grabbing coffee for bonus points. Speed ramps up over time, and it saves your best score locally in the browser.
 </p>
 <p align="center">
-  <a href="https://iammanishkr.github.io/iammanishkr/bug-squasher.html">
-    <img src="https://img.shields.io/badge/▶️_Play_Bug_Squasher-1a936f?style=for-the-badge" alt="Play Bug Squasher">
+  <a href="https://iammanishkr.github.io/iammanishkr/Deploye_Dash.html">
+    <img src="https://img.shields.io/badge/▶️_Play_Deploy_Dash-1a936f?style=for-the-badge" alt="Play Bug Squasher">
   </a>
 </p>
 
