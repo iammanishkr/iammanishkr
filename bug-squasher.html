@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bug Squasher — Manish Kumar</title>
+<style>
+  :root{
+    --paper:#f6f3ea;
+    --ink:#1b263b;
+    --pass:#1a936f;
+    --fail:#c1121f;
+    --amber:#f7b32b;
+    --line:#d8d2c0;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--mono);
+    display:flex;
+    justify-content:center;
+    padding:24px 12px;
+  }
+  .console{
+    width:100%;
+    max-width:720px;
+    background:#fffdf7;
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:0 2px 0 var(--line);
+    overflow:hidden;
+  }
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 16px;
+    border-bottom:1px solid var(--line);
+    background:#efe9db;
+  }
+  .titlebar .dots{display:flex;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:var(--fail);}
+  .dot.y{background:var(--amber);}
+  .dot.g{background:var(--pass);}
+  .titlebar .name{
+    font-size:12px;
+    letter-spacing:.04em;
+    color:#6b6455;
+  }
+  .header{
+    padding:20px 24px 8px;
+  }
+  .header h1{
+    font-family:var(--display);
+    font-size:26px;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+  }
+  .header p{
+    margin:0;
+    font-size:13px;
+    color:#6b6455;
+  }
+  .hud{
+    display:flex;
+    gap:18px;
+    padding:14px 24px;
+    border-top:1px dashed var(--line);
+    border-bottom:1px dashed var(--line);
+    font-size:13px;
+  }
+  .hud .stat b{
+    display:block;
+    font-family:var(--display);
+    font-size:20px;
+  }
+  .hud .stat.score b{color:var(--pass);}
+  .hud .stat.missed b{color:var(--fail);}
+  .hud .stat.time b{color:var(--amber);}
+
+  .field{
+    position:relative;
+    height:360px;
+    margin:16px 24px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        #fbf9f2,
+        #fbf9f2 24px,
+        #f2eee0 25px
+      );
+    overflow:hidden;
+    cursor:crosshair;
+  }
+  .field::before{
+    content:"01  it('should not crash in prod')  {  ...  }";
+    position:absolute;
+    top:6px; left:12px;
+    font-size:11px;
+    color:#c9c2ac;
+    pointer-events:none;
+  }
+  .bug{
+    position:absolute;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+    user-select:none;
+    transition: transform .08s ease;
+    filter: drop-shadow(0 1px 0 rgba(0,0,0,.15));
+  }
+  .bug:hover{ transform: scale(1.15); }
+  .bug.flaky{ filter: hue-rotate(60deg) drop-shadow(0 1px 0 rgba(0,0,0,.15)); }
+
+  .stamp{
+    position:absolute;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:14px;
+    padding:2px 8px;
+    border:2px solid var(--pass);
+    color:var(--pass);
+    border-radius:3px;
+    transform: rotate(-8deg);
+    pointer-events:none;
+    animation: fade 0.6s ease forwards;
+  }
+  @keyframes fade{
+    0%{ opacity:1; transform: rotate(-8deg) scale(1); }
+    100%{ opacity:0; transform: rotate(-8deg) scale(1.4) translateY(-20px); }
+  }
+
+  .overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(27,38,59,0.92);
+    color:#fbf9f2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+  }
+  .overlay h2{
+    font-family:var(--display);
+    font-size:24px;
+    margin:0 0 6px;
+  }
+  .overlay p{
+    font-size:13px;
+    color:#cfd6e4;
+    margin:0 0 18px;
+    max-width:380px;
+  }
+  button{
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--pass);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:4px;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  button:hover{ background:#157a5c; }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 24px 20px;
+    font-size:11px;
+    color:#8a8371;
+  }
+  .footer a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="console">
+  <div class="titlebar">
+    <div class="dots">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    </div>
+    <div class="name">test_suite.run() — bug_squasher.js</div>
+  </div>
+
+  <div class="header">
+    <h1>🐞 Bug Squasher</h1>
+    <p>Click the bugs before they crash the build. Golden bugs are flaky tests — worth more.</p>
+  </div>
+
+  <div class="hud">
+    <div class="stat score"><span>fixed</span><b id="score">0</b></div>
+    <div class="stat missed"><span>escaped</span><b id="missed">0</b></div>
+    <div class="stat time"><span>time left</span><b id="time">30</b></div>
+  </div>
+
+  <div class="field" id="field">
+    <div class="overlay" id="startOverlay">
+      <h2>Ready to ship?</h2>
+      <p>You have 30 seconds. Squash as many bugs as you can before they escape to production. Miss too many and the build fails.</p>
+      <button id="startBtn">Run Tests ▶</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>build status: <b id="buildStatus" style="color:#8a8371;">idle</b></span>
+    <a href="https://github.com/iammanishkr" target="_blank">@iammanishkr</a>
+  </div>
+</div>
+
+<script>
+const field = document.getElementById('field');
+const scoreEl = document.getElementById('score');
+const missedEl = document.getElementById('missed');
+const timeEl = document.getElementById('time');
+const startOverlay = document.getElementById('startOverlay');
+const startBtn = document.getElementById('startBtn');
+const buildStatus = document.getElementById('buildStatus');
+
+let score = 0, missed = 0, timeLeft = 30;
+let spawnTimer = null, countdownTimer = null;
+let running = false;
+
+function rand(min, max){ return Math.random() * (max - min) + min; }
+
+function spawnBug(){
+  if(!running) return;
+  const bug = document.createElement('div');
+  const isFlaky = Math.random() < 0.18;
+  bug.className = 'bug' + (isFlaky ? ' flaky' : '');
+  bug.textContent = '🐛';
+
+  const fw = field.clientWidth, fh = field.clientHeight;
+  const x = rand(10, fw - 30);
+  const y = rand(30, fh - 30);
+  bug.style.left = x + 'px';
+  bug.style.top = y + 'px';
+
+  const lifespan = rand(1100, 1800);
+  const timeout = setTimeout(() => {
+    if(bug.parentNode){
+      bug.remove();
+      missed++;
+      missedEl.textContent = missed;
+      if(missed >= 12){ endGame(false); }
+    }
+  }, lifespan);
+
+  bug.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearTimeout(timeout);
+    score += isFlaky ? 3 : 1;
+    scoreEl.textContent = score;
+    showStamp(x, y);
+    bug.remove();
+  });
+
+  field.appendChild(bug);
+}
+
+function showStamp(x, y){
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp';
+  stamp.textContent = 'PASSED';
+  stamp.style.left = x + 'px';
+  stamp.style.top = y + 'px';
+  field.appendChild(stamp);
+  setTimeout(() => stamp.remove(), 600);
+}
+
+function startGame(){
+  score = 0; missed = 0; timeLeft = 30;
+  scoreEl.textContent = score;
+  missedEl.textContent = missed;
+  timeEl.textContent = timeLeft;
+  buildStatus.textContent = 'running...';
+  buildStatus.style.color = 'var(--amber)';
+  startOverlay.remove();
+  running = true;
+
+  spawnTimer = setInterval(spawnBug, 550);
+  countdownTimer = setInterval(() => {
+    timeLeft--;
+    timeEl.textContent = timeLeft;
+    if(timeLeft <= 0){ endGame(true); }
+  }, 1000);
+}
+
+function endGame(timeUp){
+  running = false;
+  clearInterval(spawnTimer);
+  clearInterval(countdownTimer);
+  document.querySelectorAll('.bug').forEach(b => b.remove());
+
+  const passed = missed < 12;
+  buildStatus.textContent = passed ? 'build passed ✔' : 'build failed ✘';
+  buildStatus.style.color = passed ? 'var(--pass)' : 'var(--fail)';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.innerHTML = `
+    <h2 style="color:${passed ? '#7be3b8' : '#ff9b9b'}">${passed ? 'Build Passed ✔' : 'Build Failed ✘'}</h2>
+    <p>Bugs fixed: <b>${score}</b> &nbsp;|&nbsp; Escaped: <b>${missed}</b></p>
+    <button id="retryBtn">Run Again ▶</button>
+  `;
+  field.appendChild(overlay);
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    overlay.remove();
+    startGame();
+  });
+}
+
+startBtn.addEventListener('click', startGame);
+</script>
+
+</body>
+</html>
